@@ -1,50 +1,62 @@
 package com.example.demo.security;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 
 
 
 public class UserPrincipal implements UserDetails {
 	
-	private String username;
-	private String password;
-	private boolean active;
-	private List<GrantedAuthority> authorities;
+//	private String username;
+//	private String password;
+//	private boolean active;
+//	private List<GrantedAuthority> authorities;
+	
+	private User user;
 
 	public UserPrincipal(User user) {
-		this.username = user.getUsername();
-		this.password = user.getPassword();
-		this.active = user.isActive();
-		this.authorities = Arrays.stream(user.getRoles().split(","))
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
+//		this.username = user.getUsername();
+//		this.password = user.getPassword();
+//		this.active = user.isActive();
+//		this.authorities = Arrays.stream(user.getRoles().split(","))
+//				.map(SimpleGrantedAuthority::new)
+//				.collect(Collectors.toList());
+		this.user = user;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		return authorities;
+//		return authorities;
+		Set<Role> roles = user.getRoles();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+         
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+         
+        return authorities;
 	}
 
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return password;
+		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return username;
+		return user.getUsername();
 	}
 
 	@Override
@@ -68,7 +80,7 @@ public class UserPrincipal implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return active;
+		return user.isActive();
 	}
 
 	

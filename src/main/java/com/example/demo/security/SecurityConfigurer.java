@@ -37,13 +37,26 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 		// TODO Auto-generated method stub
 		http.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/authenticate")
-				.permitAll()
-				.anyRequest()
-				.authenticated()
-				.and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.antMatchers("/authenticate").permitAll()
+			.antMatchers("/hi").hasAnyAuthority("USER")
+			.anyRequest().authenticated()
+			.and().sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		
+//		 http.authorizeRequests()
+//         .antMatchers("/").hasAnyAuthority("USER", "CREATOR", "EDITOR", "ADMIN")
+//         .antMatchers("/new").hasAnyAuthority("ADMIN", "CREATOR")
+//         .antMatchers("/edit/**").hasAnyAuthority("ADMIN", "EDITOR")
+//         .antMatchers("/delete/**").hasAuthority("ADMIN")
+//         .anyRequest().authenticated()
+//         .and()
+//         .formLogin().permitAll()
+//         .and()
+//         .logout().permitAll()
+//         .and()
+//         .exceptionHandling().accessDeniedPage("/403")
+//         ;
 	}
 
 	@Override

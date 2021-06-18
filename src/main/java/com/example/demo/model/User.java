@@ -1,8 +1,15 @@
 package com.example.demo.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class User {
@@ -13,7 +20,10 @@ public class User {
 	private String username;
 	private String password;
 	private boolean active;
-	private String roles;
+//	private String roles;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Role> roles;
 	
 	public long getId() {
 		return id;
@@ -39,12 +49,11 @@ public class User {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	public String getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
-	public void setRoles(String roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
-	
 	
 }
